@@ -18,6 +18,9 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         tableView.dataSource = self
+        tableView.delegate = self
+        
+        tableView.register(UINib(nibName: "MyCustomTableViewCell", bundle: nil), forCellReuseIdentifier: "myCustomCell")
     }
 
 
@@ -28,17 +31,44 @@ extension ViewController: UITableViewDataSource{
         return myCountries.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "myCell")
-        if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: "myCell")
-            cell?.backgroundColor = .lightGray
-            cell?.textLabel?.font = UIFont.systemFont(ofSize: 18)
-        }
-        cell?.textLabel?.text = myCountries[indexPath.row]
-        return cell!
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0{
+            return 50
+        }
+        return 150
+    }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            var cell = tableView.dequeueReusableCell(withIdentifier: "myCell")
+            if cell == nil {
+                cell = UITableViewCell(style: .default, reuseIdentifier: "myCell")
+                cell?.backgroundColor = .lightGray
+                cell?.textLabel?.font = UIFont.systemFont(ofSize: 18)
+                cell?.accessoryType = .disclosureIndicator
+            }
+            cell?.textLabel?.text = myCountries[indexPath.row]
+            return cell!
+        }else{
+            var cell = tableView.dequeueReusableCell(withIdentifier: "myCustomCell", for: indexPath) as? MyCustomTableViewCell
+            
+            cell?.myFirstLabel.text = String(indexPath.row + 1)
+            cell?.mySecondLabel.text = myCountries[indexPath.row]
+            
+            return cell!
+        }
+        
+    }
+    
+}
+
+extension ViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(myCountries[indexPath.row])
+    }
 }
 
