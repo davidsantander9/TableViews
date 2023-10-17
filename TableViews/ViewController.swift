@@ -39,7 +39,7 @@ extension ViewController: UITableViewDataSource{
         if indexPath.section == 0{
             return 50
         }
-        return 150
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -53,15 +53,17 @@ extension ViewController: UITableViewDataSource{
             }
             cell?.textLabel?.text = myCountries[indexPath.row]
             return cell!
-        }else{
-            var cell = tableView.dequeueReusableCell(withIdentifier: "myCustomCell", for: indexPath) as? MyCustomTableViewCell
-            
-            cell?.myFirstLabel.text = String(indexPath.row + 1)
-            cell?.mySecondLabel.text = myCountries[indexPath.row]
-            
-            return cell!
         }
+        var cell = tableView.dequeueReusableCell(withIdentifier: "myCustomCell", for: indexPath) as? MyCustomTableViewCell
         
+        cell?.myFirstLabel.text = String(indexPath.row + 1)
+        cell?.mySecondLabel.text = myCountries[indexPath.row]
+        
+        if indexPath.row == 2 {
+            cell!.mySecondLabel.text = "asdasda sadf asd asf asf asf asfds qwqwe qw uquh qwue qiuwe iuhqwiuqiuoiuh qwuiheqiuhweiquh "
+        }
+            
+        return cell!
     }
     
 }
